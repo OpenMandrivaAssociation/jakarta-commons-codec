@@ -36,7 +36,7 @@
 
 Name:           jakarta-commons-codec
 Version:        1.3
-Release:        %mkrel 7.1
+Release:        %mkrel 7.2
 Summary:        Jakarta Commons Codec Package
 License:        Apache License
 Group:          Development/Java
