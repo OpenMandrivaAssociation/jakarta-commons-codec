@@ -1,4 +1,4 @@
-# Copyright (c) 2000-2005, JPackage Project
+# Copyright (c) 2000-2007, JPackage Project
 # All rights reserved.
 #
 # Redistribution and use in source and binary forms, with or without
@@ -28,7 +28,9 @@
 # OF THIS SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
 #
 
-%define gcj_support 1
+%define _with_gcj_support 1
+
+%define gcj_support %{?_with_gcj_support:1}%{!?_with_gcj_support:%{?_without_gcj_support:0}%{!?_without_gcj_support:%{?_gcj_support:%{_gcj_support}}%{!?_gcj_support:0}}}
 
 %define base_name  codec
 %define short_name commons-%{base_name}
@@ -36,16 +38,20 @@
 
 Name:           jakarta-commons-codec
 Version:        1.3
-Release:        %mkrel 7.2
-Summary:        Jakarta Commons Codec Package
-License:        Apache License
+Release:        %mkrel 8.2.1
+Summary:        Implementations of common encoders and decoders
+License:        Apache Software License
 Group:          Development/Java
-#Vendor:         JPackage Project
-#Distribution:   JPackage
 Epoch:          0
 URL:            http://jakarta.apache.org/commons/codec/
-Source0:        http://www.apache.org/dist/jakarta/commons/codec/source/commons-codec-%{version}-src.tar.gz
+Source0:        commons-codec-%{version}-src.tar.gz
+# svn export http://svn.apache.org/repos/asf/jakarta/commons/proper/codec/tags/CODEC_1_3/
+# cd CODEC_1_3
+# tar czvf commons-codec-1.3-src.tar.gz .
+
 Patch0:         jakarta-commons-codec-1.3-buildscript.patch
+# Add OSGi manifest
+Patch1:         %{name}-addosgimanifest.patch
 BuildRequires:  jpackage-utils >= 0:1.6
 BuildRequires:  ant >= 0:1.6.2
 BuildRequires:  ant-junit
@@ -53,28 +59,26 @@ BuildRequires:  junit
 BuildRequires:  java-javadoc
 %if ! %{gcj_support}
 BuildArch:      noarch
-BuildRequires:  java-devel
 %endif
-BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-buildroot
-Provides:       %{short_name}
-Obsoletes:      %{short_name}
+BuildRoot:      %{_tmppath}/%{name}-%{version}-%{release}-root
+Provides:       %{short_name} = %{epoch}:%{version}-%{release}
+Obsoletes:      %{short_name} <= %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
-BuildRequires:                java-gcj-compat-devel
-Requires(post):                java-gcj-compat
-Requires(postun):        java-gcj-compat
+BuildRequires:          java-gcj-compat-devel
+Requires(post):         java-gcj-compat
+Requires(postun):       java-gcj-compat
 %endif
 
 %description
 Commons Codec is an attempt to provide definitive implementations of
-commonly used encoders and decoders.
+commonly used encoders and decoders. Examples include Base64, Hex,
+Phonetic and URLs.
 
 %package        javadoc
 Summary:        Javadoc for %{name}
 Group:          Development/Java
 Requires:       java-javadoc
-Requires(post): /bin/rm /bin/ln
-Requires(postun): /bin/rm
 
 %description    javadoc
 Javadoc for %{name}.
@@ -88,6 +92,15 @@ Javadoc for %{name}.
 # and thus preventing the build to proceed.
 # This problem has been communicated upstream Bug 31096
 %patch0 -p1
+
+# Add OSGi manifest
+pushd src/conf
+%patch1 -p0
+popd
+
+#fixes eof encoding
+%{__sed} -i 's/\r//' LICENSE.txt
+%{__sed} -i 's/\r//' RELEASE-NOTES.txt
 
 # -----------------------------------------------------------------------------
 
@@ -120,9 +133,7 @@ cp -p dist/%{name}-%{version}.jar $RPM_BUILD_ROOT%{_javadir}
 # javadoc
 mkdir -p $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
 cp -pr dist/docs/api/* $RPM_BUILD_ROOT%{_javadocdir}/%{name}-%{version}
-ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name} # ghost symlink
-
-%{__perl} -pi -e 's/\r$//g' LICENSE.txt RELEASE-NOTES.txt
+ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name}
 
 # -----------------------------------------------------------------------------
 
@@ -133,12 +144,22 @@ ln -s %{name}-%{version} $RPM_BUILD_ROOT%{_javadocdir}/%{name} # ghost symlink
 %clean
 rm -rf $RPM_BUILD_ROOT
 
+# -----------------------------------------------------------------------------
+
 %if %{gcj_support}
 %post
-%{update_gcjdb}
+if [ -x %{_bindir}/rebuild-gcj-db ]
+then
+  %{_bindir}/rebuild-gcj-db
+fi
+%endif
 
+%if %{gcj_support}
 %postun
-%{clean_gcjdb}
+if [ -x %{_bindir}/rebuild-gcj-db ]
+then
+  %{_bindir}/rebuild-gcj-db
+fi
 %endif
 
 %files
@@ -155,5 +176,4 @@ rm -rf $RPM_BUILD_ROOT
 %defattr(0644,root,root,0755)
 %doc %{_javadocdir}/%{name}-%{version}
 %doc %{_javadocdir}/%{name}
-
-
+# -----------------------------------------------------------------------------
