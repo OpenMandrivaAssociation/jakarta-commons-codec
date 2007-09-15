@@ -38,7 +38,7 @@
 
 Name:           jakarta-commons-codec
 Version:        1.3
-Release:        %mkrel 8.2.1
+Release:        %mkrel 8.2.2
 Summary:        Implementations of common encoders and decoders
 License:        Apache Software License
 Group:          Development/Java
@@ -66,8 +66,6 @@ Obsoletes:      %{short_name} <= %{epoch}:%{version}-%{release}
 
 %if %{gcj_support}
 BuildRequires:          java-gcj-compat-devel
-Requires(post):         java-gcj-compat
-Requires(postun):       java-gcj-compat
 %endif
 
 %description
