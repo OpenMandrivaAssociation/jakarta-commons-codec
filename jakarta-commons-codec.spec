@@ -38,7 +38,7 @@
 
 Name:           jakarta-commons-codec
 Version:        1.3
-Release:        %mkrel 8.2.2
+Release:        %mkrel 8.2.3
 Summary:        Implementations of common encoders and decoders
 License:        Apache Software License
 Group:          Development/Java
@@ -52,7 +52,7 @@ Source0:        commons-codec-%{version}-src.tar.gz
 Patch0:         jakarta-commons-codec-1.3-buildscript.patch
 # Add OSGi manifest
 Patch1:         %{name}-addosgimanifest.patch
-BuildRequires:  jpackage-utils >= 0:1.6
+BuildRequires:  java-rpmbuild >= 0:1.6
 BuildRequires:  ant >= 0:1.6.2
 BuildRequires:  ant-junit
 BuildRequires:  junit
