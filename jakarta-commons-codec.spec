@@ -42,6 +42,7 @@ Release:        %mkrel 8.2.3
 Summary:        Implementations of common encoders and decoders
 License:        Apache Software License
 Group:          Development/Java
+BuildRoot: %{_tmppath}/%{name}-%{version}-%{release}-buildroot
 Epoch:          0
 URL:            http://jakarta.apache.org/commons/codec/
 Source0:        commons-codec-%{version}-src.tar.gz
