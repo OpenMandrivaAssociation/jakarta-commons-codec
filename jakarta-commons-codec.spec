@@ -7,7 +7,7 @@
 
 Name:		jakarta-commons-codec
 Version:	1.4
-Release:	%mkrel 1
+Release:	%mkrel 2
 Summary:	Implementations of common encoders and decoders
 License:	Apache Software License
 Group:		Development/Java
