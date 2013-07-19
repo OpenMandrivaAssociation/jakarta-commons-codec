@@ -4,13 +4,13 @@
 %define short_name commons-%{base_name}
 
 Name:		jakarta-commons-codec
-Version:	1.4
-Release:	3
+Version:	1.8
+Release:	1
 Summary:	Implementations of common encoders and decoders
 License:	Apache Software License
 Group:		Development/Java
 Url:		http://jakarta.apache.org/commons/codec/
-Source0:	http://archive.apache.org/dist/commons/codec/source/commons-codec-%{version}-src.tar.gz
+Source0:	http://archive.apache.org/dist/commons/codec/source/commons-codec-1.8-src.tar.gz
 # svn export http://svn.apache.org/repos/asf/jakarta/commons/proper/codec/tags/CODEC_1_3/
 # cd CODEC_1_3
 # tar czvf commons-codec-1.3-src.tar.gz .
@@ -106,4 +106,5 @@ ln -s %{name}-%{version} %{buildroot}%{_javadocdir}/%{name}
 %files javadoc
 %doc %{_javadocdir}/%{name}-%{version}
 %doc %{_javadocdir}/%{name}
+
 
