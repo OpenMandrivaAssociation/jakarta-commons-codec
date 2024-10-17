@@ -9,7 +9,7 @@ Release:	3
 Summary:	Implementations of common encoders and decoders
 License:	Apache Software License
 Group:		Development/Java
-Url:		http://jakarta.apache.org/commons/codec/
+Url:		https://jakarta.apache.org/commons/codec/
 Source0:	http://archive.apache.org/dist/commons/codec/source/commons-codec-%{version}-src.tar.gz
 # svn export http://svn.apache.org/repos/asf/jakarta/commons/proper/codec/tags/CODEC_1_3/
 # cd CODEC_1_3
